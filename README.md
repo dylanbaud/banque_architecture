@@ -35,8 +35,8 @@ Suivez ces étapes pour démarrer l'environnement complet.
 
 ### 📂 Structure des services
 
-*   **gateway-nginx** : Serveur Nginx servant de proxy inverse.
-*   **gateway-php** : Service PHP-FPM gérant la logique de la Gateway.
+*   **gateway-service/** : Code source et configuration de la Gateway.
+*   **gateway-service/nginx/** : Configuration Nginx spécifique.
 *   **db** : Base de données MySQL 8.0.
 
 ### ⚙️ Commandes utiles
