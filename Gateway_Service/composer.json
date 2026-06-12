@@ -1,0 +1,25 @@
+{
+    "name": "gateway/api-gateway",
+    "description": "Lightweight PHP API Gateway with JWT authentication",
+    "type": "project",
+    "require": {
+        "php": ">=8.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gateway\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Gateway\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "serve": "php -S localhost:8080 -t public",
+        "test": "vendor/bin/phpunit"
+    }
+}

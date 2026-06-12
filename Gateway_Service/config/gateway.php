@@ -1,0 +1,67 @@
+<?php
+
+declare(strict_types=1);
+
+return [
+
+    // ── Services (microservices base URLs) ──────────────────────────────────
+    'services' => [
+        'users'    => 'http://users-service:8001',
+        'orders'   => 'http://orders-service:8002',
+        'products' => 'http://products-service:8003',
+        'auth'     => 'http://auth-service:8004',
+    ],
+
+    // ── Routes ─────────────────────────────────────────────────────────────
+    // pattern       : URL pattern (supports {param} placeholders)
+    // service       : key from 'services' above
+    // upstream_path : path forwarded to the service ({param} replaced)
+    // methods       : allowed HTTP methods (* = all)
+    'routes' => [
+        // Auth service (public)
+        ['pattern' => '/auth/login',    'service' => 'auth',     'upstream_path' => '/login',           'methods' => ['POST']],
+        ['pattern' => '/auth/register', 'service' => 'auth',     'upstream_path' => '/register',        'methods' => ['POST']],
+        ['pattern' => '/auth/refresh',  'service' => 'auth',     'upstream_path' => '/refresh',         'methods' => ['POST']],
+
+        // Users service (protected)
+        ['pattern' => '/users',           'service' => 'users',  'upstream_path' => '/users',           'methods' => ['GET', 'POST']],
+        ['pattern' => '/users/{id}',      'service' => 'users',  'upstream_path' => '/users/{id}',      'methods' => ['GET', 'PUT', 'DELETE']],
+        ['pattern' => '/users/{id}/profile', 'service' => 'users', 'upstream_path' => '/users/{id}/profile', 'methods' => ['GET', 'PUT']],
+
+        // Products service (protected)
+        ['pattern' => '/products',        'service' => 'products', 'upstream_path' => '/products',      'methods' => ['GET', 'POST']],
+        ['pattern' => '/products/{id}',   'service' => 'products', 'upstream_path' => '/products/{id}', 'methods' => ['GET', 'PUT', 'DELETE']],
+
+        // Orders service (protected)
+        ['pattern' => '/orders',          'service' => 'orders', 'upstream_path' => '/orders',          'methods' => ['GET', 'POST']],
+        ['pattern' => '/orders/{id}',     'service' => 'orders', 'upstream_path' => '/orders/{id}',     'methods' => ['GET', 'PUT']],
+    ],
+
+    // ── Public paths (no JWT required) ─────────────────────────────────────
+    'public_paths' => [
+        '/auth/login',
+        '/auth/register',
+        '/auth/refresh',
+    ],
+
+    // ── JWT ─────────────────────────────────────────────────────────────────
+    'jwt' => [
+        'secret'    => $_ENV['JWT_SECRET'] ?? 'change-me-in-production',
+        'algorithm' => 'HS256',
+        'leeway'    => 10,          // seconds of clock skew tolerated
+    ],
+
+    // ── CORS ────────────────────────────────────────────────────────────────
+    'cors' => [
+        'allowed_origins'  => ['*'],
+        'allowed_methods'  => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        'allowed_headers'  => ['Content-Type', 'Authorization', 'X-Requested-With'],
+        'expose_headers'   => ['X-Request-Id'],
+        'max_age'          => 3600,
+        'allow_credentials' => false,
+    ],
+
+    // ── Logging ─────────────────────────────────────────────────────────────
+    'log_file' => __DIR__ . '/../logs/gateway.log',
+
+];
