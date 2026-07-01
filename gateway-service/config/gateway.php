@@ -10,6 +10,7 @@ return [
         'orders'   => 'http://orders-service:8002',
         'products' => 'http://products-service:8003',
         'auth'     => 'http://auth-service:8004',
+        'compte'   => 'http://compte-nginx:80',
     ],
 
     // ── Routes ─────────────────────────────────────────────────────────────
@@ -35,6 +36,12 @@ return [
         // Orders service (protected)
         ['pattern' => '/orders',          'service' => 'orders', 'upstream_path' => '/orders',          'methods' => ['GET', 'POST']],
         ['pattern' => '/orders/{id}',     'service' => 'orders', 'upstream_path' => '/orders/{id}',     'methods' => ['GET', 'PUT']],
+
+        // Compte service
+        ['pattern' => '/accounts',                 'service' => 'compte', 'upstream_path' => '/accounts',                 'methods' => ['POST']],
+        ['pattern' => '/accounts/{id}',            'service' => 'compte', 'upstream_path' => '/accounts/{id}',            'methods' => ['GET']],
+        ['pattern' => '/accounts/{id}/deposit',    'service' => 'compte', 'upstream_path' => '/accounts/{id}/deposit',    'methods' => ['POST']],
+        ['pattern' => '/accounts/{id}/withdraw',   'service' => 'compte', 'upstream_path' => '/accounts/{id}/withdraw',   'methods' => ['POST']],
     ],
 
     // ── Public paths (no JWT required) ─────────────────────────────────────
@@ -42,6 +49,8 @@ return [
         '/auth/login',
         '/auth/register',
         '/auth/refresh',
+        '/accounts',
+        '/accounts/*',
     ],
 
     // ── JWT ─────────────────────────────────────────────────────────────────
@@ -62,6 +71,6 @@ return [
     ],
 
     // ── Logging ─────────────────────────────────────────────────────────────
-    'log_file' => __DIR__ . '/../logs/gateway.log',
+    'log_file' => '/tmp/gateway.log',
 
 ];

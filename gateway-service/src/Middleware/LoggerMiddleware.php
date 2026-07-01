@@ -4,11 +4,21 @@ declare(strict_types=1);
 
 namespace Gateway\Middleware;
 
-class LoggerMiddleware
-{
-    public function __construct(private readonly string $logFile) {}
+use Random\RandomException;
 
-    /** @param array<string, mixed> $request */
+readonly class LoggerMiddleware
+{
+    /**
+     * @param string $logFile
+     */
+    public function __construct(private string $logFile) {}
+
+    /**
+     * @param array $request
+     * @param callable $next
+     * @return void
+     * @throws RandomException
+     */
     public function handle(array $request, callable $next): void
     {
         $requestId = bin2hex(random_bytes(8));
@@ -18,12 +28,11 @@ class LoggerMiddleware
 
         $this->log($requestId, 'REQUEST', [
             'method' => $request['method'],
-            'uri'    => $request['uri'],
-            'ip'     => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
-            'ua'     => $request['headers']['User-Agent'] ?? '',
+            'uri' => $request['uri'],
+            'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+            'ua' => $request['headers']['User-Agent'] ?? '',
         ]);
 
-        // Capture response code after next runs
         ob_start();
         $next($request);
         $body = ob_get_clean();
@@ -31,14 +40,19 @@ class LoggerMiddleware
         $duration = round((microtime(true) - $startTime) * 1000, 2);
 
         $this->log($requestId, 'RESPONSE', [
-            'status'      => http_response_code(),
+            'status' => http_response_code(),
             'duration_ms' => $duration,
         ]);
 
         echo $body;
     }
 
-    /** @param array<string, mixed> $context */
+    /**
+     * @param string $requestId
+     * @param string $event
+     * @param array $context
+     * @return void
+     */
     private function log(string $requestId, string $event, array $context): void
     {
         $line = sprintf(
@@ -51,7 +65,7 @@ class LoggerMiddleware
 
         $dir = dirname($this->logFile);
         if (!is_dir($dir)) {
-            mkdir($dir, 0755, true);
+            mkdir($dir, 0o755, true);
         }
 
         file_put_contents($this->logFile, $line, FILE_APPEND | LOCK_EX);

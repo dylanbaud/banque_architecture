@@ -16,9 +16,8 @@ class HttpProxy
     ];
 
     /**
-     * Forward the gateway request to the upstream service and stream the response.
-     *
-     * @param array<string, mixed> $request
+     * @param array $request
+     * @return void
      */
     public function forward(array $request): void
     {
@@ -85,8 +84,8 @@ class HttpProxy
     // ── Helpers ──────────────────────────────────────────────────────────────
 
     /**
-     * @param  array<string, string> $headers
-     * @return string[]
+     * @param array $headers
+     * @return array
      */
     private function buildCurlHeaders(array $headers): array
     {
@@ -100,6 +99,11 @@ class HttpProxy
         return $result;
     }
 
+    /**
+     * @param string $url
+     * @param string $reason
+     * @return void
+     */
     private function gatewayError(string $url, string $reason): void
     {
         http_response_code(502);

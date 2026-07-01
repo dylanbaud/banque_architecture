@@ -6,13 +6,17 @@ namespace Gateway\Router;
 
 class Router
 {
-    /** @param array<int, array<string, mixed>> $routes */
+    /**
+     * @param array $routes
+     */
     public function __construct(private readonly array $routes) {}
 
     /**
      * Match an incoming request against registered routes.
      *
-     * @return array<string, mixed>|null  Matched route + extracted params, or null
+     * @param string $method
+     * @param string $uri
+     * @return array|null
      */
     public function match(string $method, string $uri): ?array
     {
@@ -51,6 +55,10 @@ class Router
         return null;
     }
 
+    /**
+     * @param string $pattern
+     * @return string
+     */
     private function toRegex(string $pattern): string
     {
         $pattern = rtrim($pattern, '/') ?: '/';

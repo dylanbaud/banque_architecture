@@ -4,18 +4,24 @@ declare(strict_types=1);
 
 namespace Gateway\Middleware;
 
-class CorsMiddleware
+readonly class CorsMiddleware
 {
-    /** @param array<string, mixed> $config */
-    public function __construct(private readonly array $config) {}
+    /**
+     * @param array $config
+     */
+    public function __construct(private array $config) {}
 
-    /** @param array<string, mixed> $request */
+    /**
+     * @param array $request
+     * @param callable $next
+     * @return void
+     */
     public function handle(array $request, callable $next): void
     {
         $origin = $request['headers']['Origin'] ?? $request['headers']['origin'] ?? '*';
 
         $allowedOrigins = $this->config['allowed_origins'];
-        $originAllowed  = in_array('*', $allowedOrigins, true) || in_array($origin, $allowedOrigins, true);
+        $originAllowed = in_array('*', $allowedOrigins, true) || in_array($origin, $allowedOrigins, true);
 
         if ($originAllowed) {
             header('Access-Control-Allow-Origin: ' . (in_array('*', $allowedOrigins, true) ? '*' : $origin));
@@ -30,7 +36,6 @@ class CorsMiddleware
             header('Access-Control-Allow-Credentials: true');
         }
 
-        // Handle preflight
         if ($request['method'] === 'OPTIONS') {
             http_response_code(204);
             return;
