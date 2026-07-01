@@ -39,6 +39,7 @@ Suivez ces étapes pour démarrer l'environnement complet.
 *   **gateway-service/** : Code source et configuration de la Gateway.
 *   **gateway-service/nginx/** : Configuration Nginx spécifique.
 *   **compte-service/** : Micro-service de gestion des comptes en PHP (Symfony, Architecture Hexagonale).
+*   **client-service/** : Micro-service de gestion des clients en PHP (Symfony, Architecture Hexagonale).
 *   **db** : Base de données MySQL 8.0 pour la persistance des données.
 *   **phpmyadmin** : Interface web d'administration de la base de données.
 
@@ -67,12 +68,18 @@ Suivez ces étapes pour démarrer l'environnement complet.
 *   **Lancer les tests (PHPUnit) :**
     ```bash
     docker exec compte-php vendor/bin/phpunit
+    docker exec client-php vendor/bin/phpunit
     ```
 
 *   **Vérifier et formater le code (PHPStan & PHP-CS-Fixer) :**
     ```bash
+    # Service Compte
     docker exec compte-php vendor/bin/phpstan analyse src/ --level=6
     docker exec compte-php vendor/bin/php-cs-fixer fix src/ tests/
+
+    # Service Client
+    docker exec client-php vendor/bin/phpstan analyse src/ --level=6
+    docker exec client-php vendor/bin/php-cs-fixer fix
     ```
 
 ---

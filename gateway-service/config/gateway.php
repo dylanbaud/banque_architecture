@@ -11,6 +11,7 @@ return [
         'products' => 'http://products-service:8003',
         'auth'     => 'http://auth-service:8004',
         'compte'   => 'http://compte-nginx:80',
+        'client'   => 'http://client-nginx:80',
     ],
 
     // ── Routes ─────────────────────────────────────────────────────────────
@@ -42,6 +43,10 @@ return [
         ['pattern' => '/accounts/{id}',            'service' => 'compte', 'upstream_path' => '/accounts/{id}',            'methods' => ['GET']],
         ['pattern' => '/accounts/{id}/deposit',    'service' => 'compte', 'upstream_path' => '/accounts/{id}/deposit',    'methods' => ['POST']],
         ['pattern' => '/accounts/{id}/withdraw',   'service' => 'compte', 'upstream_path' => '/accounts/{id}/withdraw',   'methods' => ['POST']],
+
+        // Client service
+        ['pattern' => '/clients',                  'service' => 'client', 'upstream_path' => '/clients',                  'methods' => ['POST']],
+        ['pattern' => '/clients/{id}',             'service' => 'client', 'upstream_path' => '/clients/{id}',             'methods' => ['GET']],
     ],
 
     // ── Public paths (no JWT required) ─────────────────────────────────────
@@ -51,6 +56,8 @@ return [
         '/auth/refresh',
         '/accounts',
         '/accounts/*',
+        '/clients',
+        '/clients/*',
     ],
 
     // ── JWT ─────────────────────────────────────────────────────────────────
