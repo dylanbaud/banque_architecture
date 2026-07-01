@@ -9,7 +9,7 @@ return [
         'users'    => 'http://users-service:8001',
         'orders'   => 'http://orders-service:8002',
         'products' => 'http://products-service:8003',
-        'auth'     => 'http://auth-service:8004',
+        'auth'        => 'http://auth-nginx:80',
         'compte'      => 'http://compte-nginx:80',
         'client'      => 'http://client-nginx:80',
         'transaction' => 'http://transaction-nginx:80',
@@ -59,17 +59,11 @@ return [
         '/auth/login',
         '/auth/register',
         '/auth/refresh',
-        '/accounts',
-        '/accounts/*',
-        '/clients',
-        '/clients/*',
-        '/transactions',
-        '/transactions/*',
     ],
 
     // ── JWT ─────────────────────────────────────────────────────────────────
     'jwt' => [
-        'secret'    => $_ENV['JWT_SECRET'] ?? 'change-me-in-production',
+        'secret'    => getenv('JWT_SECRET') ?? 'change-me-in-production',
         'algorithm' => 'HS256',
         'leeway'    => 10,          // seconds of clock skew tolerated
     ],

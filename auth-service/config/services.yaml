@@ -1,0 +1,54 @@
+parameters:
+    # Environment variables
+    env(DB_DSN): 'mysql:host=db;port=3306;dbname=banque'
+    env(DB_USER): 'banque'
+    env(DB_PASSWORD): 'banque'
+    env(JWT_SECRET): 'super_secret_key'
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    # Configuration du repository MySQL (PDO)
+    App\Infrastructure\Adapter\Out\Persistence\PdoUserRepository:
+        arguments:
+            $dbDsn: '%env(string:DB_DSN)%'
+            $dbUser: '%env(string:DB_USER)%'
+            $dbPassword: '%env(string:DB_PASSWORD)%'
+
+    App\Application\Port\Out\UserRepositoryInterface: '@App\Infrastructure\Adapter\Out\Persistence\PdoUserRepository'
+
+    # Configuration JWT
+    App\Infrastructure\Adapter\Out\Jwt\FirebaseJwtGenerator:
+        arguments:
+            $secretKey: '%env(string:JWT_SECRET)%'
+
+    App\Application\Port\Out\JwtGeneratorInterface: '@App\Infrastructure\Adapter\Out\Jwt\FirebaseJwtGenerator'
+
+    # Use Cases
+    App\Application\UseCase\RegisterUseCase:
+        arguments:
+            $userRepository: '@App\Application\Port\Out\UserRepositoryInterface'
+
+    App\Application\UseCase\LoginUseCase:
+        arguments:
+            $userRepository: '@App\Application\Port\Out\UserRepositoryInterface'
+            $jwtGenerator: '@App\Application\Port\Out\JwtGeneratorInterface'
+
+    # Controllers
+    App\Infrastructure\Adapter\In\Web\AuthController:
+        arguments:
+            $registerUseCase: '@App\Application\UseCase\RegisterUseCase'
+            $loginUseCase: '@App\Application\UseCase\LoginUseCase'
+            $validator: '@Symfony\Component\Validator\Validator\ValidatorInterface'
+        tags: ['controller.service_arguments']

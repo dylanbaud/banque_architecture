@@ -38,6 +38,7 @@ Suivez ces étapes pour démarrer l'environnement complet.
 
 *   **gateway-service/** : Code source et configuration de la Gateway.
 *   **gateway-service/nginx/** : Configuration Nginx spécifique.
+*   **auth-service/** : Micro-service d'authentification (Login, Register) générant des tokens JWT.
 *   **compte-service/** : Micro-service de gestion des comptes en PHP (Symfony, Architecture Hexagonale).
 *   **client-service/** : Micro-service de gestion des clients en PHP (Symfony, Architecture Hexagonale).
 *   **transaction-service/** : Micro-service gérant les virements, en appelant le Service Compte via HTTP.
@@ -68,6 +69,7 @@ Suivez ces étapes pour démarrer l'environnement complet.
 
 *   **Lancer les tests (PHPUnit) :**
     ```bash
+    docker exec auth-php vendor/bin/phpunit
     docker exec compte-php vendor/bin/phpunit
     docker exec client-php vendor/bin/phpunit
     docker exec transaction-php vendor/bin/phpunit
@@ -75,6 +77,10 @@ Suivez ces étapes pour démarrer l'environnement complet.
 
 *   **Vérifier et formater le code (PHPStan & PHP-CS-Fixer) :**
     ```bash
+    # Service Auth
+    docker exec auth-php vendor/bin/phpstan analyse src/ --level=6
+    docker exec auth-php vendor/bin/php-cs-fixer fix
+
     # Service Compte
     docker exec compte-php vendor/bin/phpstan analyse src/ --level=6
     docker exec compte-php vendor/bin/php-cs-fixer fix src/ tests/

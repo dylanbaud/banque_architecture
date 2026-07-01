@@ -6,6 +6,10 @@ services:
       dockerfile: Dockerfile
     container_name: gateway-php
     restart: unless-stopped
+    environment:
+      JWT_SECRET: "super_secret_key_that_is_at_least_32_bytes_long_for_hs256"
+    volumes:
+      - ./gateway-service:/var/www/api-gateway
 
   gateway-nginx:
     image: nginx:alpine
@@ -75,6 +79,27 @@ services:
       - ./transaction-service/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - transaction-php
+
+  auth-php:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    container_name: auth-php
+    restart: unless-stopped
+    environment:
+      JWT_SECRET: "super_secret_key_that_is_at_least_32_bytes_long_for_hs256"
+    volumes:
+      - ./auth-service:/var/www/auth-service
+
+  auth-nginx:
+    image: nginx:alpine
+    container_name: auth-nginx
+    restart: unless-stopped
+    volumes:
+      - ./auth-service:/var/www/auth-service:ro
+      - ./auth-service/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - auth-php
 
   db:
     image: mysql:8.0
