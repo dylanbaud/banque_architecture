@@ -1,0 +1,59 @@
+parameters:
+    # Environment variables
+    env(DB_DSN): 'mysql:host=db;port=3306;dbname=banque'
+    env(DB_USER): 'banque'
+    env(DB_PASSWORD): 'banque'
+    env(COMPTE_SERVICE_URL): 'http://compte-nginx:80'
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    # Configuration du repository MySQL (PDO)
+    App\Infrastructure\Adapter\Out\Persistence\PdoTransactionRepository:
+        arguments:
+            $dbDsn: '%env(string:DB_DSN)%'
+            $dbUser: '%env(string:DB_USER)%'
+            $dbPassword: '%env(string:DB_PASSWORD)%'
+
+    App\Application\Port\Out\TransactionRepositoryInterface: '@App\Infrastructure\Adapter\Out\Persistence\PdoTransactionRepository'
+
+    # Configuration du client HTTP
+    Symfony\Component\HttpClient\HttpClient:
+        factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
+
+    App\Infrastructure\Adapter\Out\Http\HttpCompteServiceClient:
+        arguments:
+            $client: '@Symfony\Component\HttpClient\HttpClient'
+            $compteServiceUrl: '%env(string:COMPTE_SERVICE_URL)%'
+
+    App\Application\Port\Out\CompteServiceClientInterface: '@App\Infrastructure\Adapter\Out\Http\HttpCompteServiceClient'
+
+    # Use Cases
+    App\Application\UseCase\EffectuerVirementUseCase:
+        arguments:
+            $transactionRepository: '@App\Application\Port\Out\TransactionRepositoryInterface'
+            $compteServiceClient: '@App\Application\Port\Out\CompteServiceClientInterface'
+
+    App\Application\UseCase\ConsulterTransactionUseCase:
+        arguments:
+            $transactionRepository: '@App\Application\Port\Out\TransactionRepositoryInterface'
+
+    # Controllers
+    App\Infrastructure\Adapter\In\Web\TransactionController:
+        arguments:
+            $effectuerVirementUseCase: '@App\Application\UseCase\EffectuerVirementUseCase'
+            $consulterTransactionUseCase: '@App\Application\UseCase\ConsulterTransactionUseCase'
+            $validator: '@Symfony\Component\Validator\Validator\ValidatorInterface'
+        tags: ['controller.service_arguments']

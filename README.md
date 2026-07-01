@@ -40,6 +40,7 @@ Suivez ces étapes pour démarrer l'environnement complet.
 *   **gateway-service/nginx/** : Configuration Nginx spécifique.
 *   **compte-service/** : Micro-service de gestion des comptes en PHP (Symfony, Architecture Hexagonale).
 *   **client-service/** : Micro-service de gestion des clients en PHP (Symfony, Architecture Hexagonale).
+*   **transaction-service/** : Micro-service gérant les virements, en appelant le Service Compte via HTTP.
 *   **db** : Base de données MySQL 8.0 pour la persistance des données.
 *   **phpmyadmin** : Interface web d'administration de la base de données.
 
@@ -69,6 +70,7 @@ Suivez ces étapes pour démarrer l'environnement complet.
     ```bash
     docker exec compte-php vendor/bin/phpunit
     docker exec client-php vendor/bin/phpunit
+    docker exec transaction-php vendor/bin/phpunit
     ```
 
 *   **Vérifier et formater le code (PHPStan & PHP-CS-Fixer) :**
@@ -80,6 +82,10 @@ Suivez ces étapes pour démarrer l'environnement complet.
     # Service Client
     docker exec client-php vendor/bin/phpstan analyse src/ --level=6
     docker exec client-php vendor/bin/php-cs-fixer fix
+
+    # Service Transaction
+    docker exec transaction-php vendor/bin/phpstan analyse src/ --level=6 --memory-limit=512M
+    docker exec transaction-php vendor/bin/php-cs-fixer fix
     ```
 
 ---

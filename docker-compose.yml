@@ -57,6 +57,25 @@ services:
     depends_on:
       - client-php
 
+  transaction-php:
+    build:
+      context: ./transaction-service
+      dockerfile: Dockerfile
+    container_name: transaction-php
+    restart: unless-stopped
+    volumes:
+      - ./transaction-service:/var/www/transaction-service
+
+  transaction-nginx:
+    image: nginx:alpine
+    container_name: transaction-nginx
+    restart: unless-stopped
+    volumes:
+      - ./transaction-service:/var/www/transaction-service:ro
+      - ./transaction-service/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - transaction-php
+
   db:
     image: mysql:8.0
     container_name: banque_db

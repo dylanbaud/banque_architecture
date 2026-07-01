@@ -10,8 +10,9 @@ return [
         'orders'   => 'http://orders-service:8002',
         'products' => 'http://products-service:8003',
         'auth'     => 'http://auth-service:8004',
-        'compte'   => 'http://compte-nginx:80',
-        'client'   => 'http://client-nginx:80',
+        'compte'      => 'http://compte-nginx:80',
+        'client'      => 'http://client-nginx:80',
+        'transaction' => 'http://transaction-nginx:80',
     ],
 
     // ── Routes ─────────────────────────────────────────────────────────────
@@ -47,6 +48,10 @@ return [
         // Client service
         ['pattern' => '/clients',                  'service' => 'client', 'upstream_path' => '/clients',                  'methods' => ['POST']],
         ['pattern' => '/clients/{id}',             'service' => 'client', 'upstream_path' => '/clients/{id}',             'methods' => ['GET']],
+
+        // Transaction service
+        ['pattern' => '/transactions',             'service' => 'transaction', 'upstream_path' => '/transactions',             'methods' => ['POST']],
+        ['pattern' => '/transactions/{id}',        'service' => 'transaction', 'upstream_path' => '/transactions/{id}',        'methods' => ['GET']],
     ],
 
     // ── Public paths (no JWT required) ─────────────────────────────────────
@@ -58,6 +63,8 @@ return [
         '/accounts/*',
         '/clients',
         '/clients/*',
+        '/transactions',
+        '/transactions/*',
     ],
 
     // ── JWT ─────────────────────────────────────────────────────────────────
