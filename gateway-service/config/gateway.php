@@ -40,17 +40,17 @@ return [
         ['pattern' => '/orders/{id}',     'service' => 'orders', 'upstream_path' => '/orders/{id}',     'methods' => ['GET', 'PUT']],
 
         // Compte service
-        ['pattern' => '/accounts',                 'service' => 'compte', 'upstream_path' => '/accounts',                 'methods' => ['POST']],
+        ['pattern' => '/accounts',                 'service' => 'compte', 'upstream_path' => '/accounts',                 'methods' => ['GET', 'POST']],
         ['pattern' => '/accounts/{id}',            'service' => 'compte', 'upstream_path' => '/accounts/{id}',            'methods' => ['GET']],
         ['pattern' => '/accounts/{id}/deposit',    'service' => 'compte', 'upstream_path' => '/accounts/{id}/deposit',    'methods' => ['POST']],
         ['pattern' => '/accounts/{id}/withdraw',   'service' => 'compte', 'upstream_path' => '/accounts/{id}/withdraw',   'methods' => ['POST']],
 
         // Client service
-        ['pattern' => '/clients',                  'service' => 'client', 'upstream_path' => '/clients',                  'methods' => ['POST']],
+        ['pattern' => '/clients',                  'service' => 'client', 'upstream_path' => '/clients',                  'methods' => ['GET', 'POST']],
         ['pattern' => '/clients/{id}',             'service' => 'client', 'upstream_path' => '/clients/{id}',             'methods' => ['GET']],
 
         // Transaction service
-        ['pattern' => '/transactions',             'service' => 'transaction', 'upstream_path' => '/transactions',             'methods' => ['POST']],
+        ['pattern' => '/transactions',             'service' => 'transaction', 'upstream_path' => '/transactions',             'methods' => ['GET', 'POST']],
         ['pattern' => '/transactions/{id}',        'service' => 'transaction', 'upstream_path' => '/transactions/{id}',        'methods' => ['GET']],
     ],
 

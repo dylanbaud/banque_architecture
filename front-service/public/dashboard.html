@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BanqueApp — Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <h2>BanqueApp</h2>
+            <p>Gestion bancaire</p>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-link active" data-section="clients">
+                <span class="nav-icon">C</span> Clients
+            </a>
+            <a href="#" class="nav-link" data-section="comptes">
+                <span class="nav-icon">A</span> Comptes
+            </a>
+            <a href="#" class="nav-link" data-section="transactions">
+                <span class="nav-icon">T</span> Transactions
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <button id="btn-logout" class="btn">Déconnexion</button>
+        </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main">
+
+        <div id="notification" class="notification hidden"></div>
+
+        <!-- Section Clients -->
+        <section id="section-clients" class="section active">
+            <h1 class="section-title">Clients</h1>
+            <div class="cards-grid">
+                <div class="card">
+                    <p class="card-title">Créer un client</p>
+                    <form id="form-creer-client">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="client-nom">Nom</label>
+                                <input type="text" id="client-nom" placeholder="Dupont" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="client-prenom">Prénom</label>
+                                <input type="text" id="client-prenom" placeholder="Jean" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="client-email">Email</label>
+                            <input type="email" id="client-email" placeholder="jean@dupont.fr" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full btn-sm">Créer</button>
+                    </form>
+                </div>
+                <div class="card">
+                    <p class="card-title">Consulter un client</p>
+                    <form id="form-consulter-client">
+                        <div class="form-group">
+                            <label for="client-id">Identifiant client</label>
+                            <input type="text" id="client-id" placeholder="client_xxxx" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full btn-sm">Rechercher</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="result-client" class="result-box hidden"></div>
+
+            <div class="card" style="margin-top: 8px;">
+                <p class="card-title">Liste des clients</p>
+                <div id="clients-table-container">
+                    <p class="table-empty">Aucun client enregistré.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Comptes -->
+        <section id="section-comptes" class="section">
+            <h1 class="section-title">Comptes</h1>
+            <div class="cards-grid">
+                <div class="card">
+                    <p class="card-title">Créer un compte</p>
+                    <form id="form-creer-compte">
+                        <div class="form-group">
+                            <label for="compte-client-id">Identifiant client</label>
+                            <input type="text" id="compte-client-id" placeholder="client_xxxx" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="compte-solde-initial">Solde initial (€)</label>
+                            <input type="number" id="compte-solde-initial" placeholder="0" min="0" step="0.01" value="0">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full btn-sm">Créer</button>
+                    </form>
+                </div>
+                <div class="card">
+                    <p class="card-title">Consulter un compte</p>
+                    <form id="form-consulter-compte">
+                        <div class="form-group">
+                            <label for="compte-id">Identifiant compte</label>
+                            <input type="text" id="compte-id" placeholder="cpt_xxxx" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full btn-sm">Rechercher</button>
+                    </form>
+                </div>
+                <div class="card">
+                    <p class="card-title">Déposer</p>
+                    <form id="form-deposer">
+                        <div class="form-group">
+                            <label for="depot-compte-id">Identifiant compte</label>
+                            <input type="text" id="depot-compte-id" placeholder="cpt_xxxx" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="depot-montant">Montant (€)</label>
+                            <input type="number" id="depot-montant" placeholder="100" min="0.01" step="0.01" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full btn-sm">Déposer</button>
+                    </form>
+                </div>
+                <div class="card">
+                    <p class="card-title">Retirer</p>
+                    <form id="form-retirer">
+                        <div class="form-group">
+                            <label for="retrait-compte-id">Identifiant compte</label>
+                            <input type="text" id="retrait-compte-id" placeholder="cpt_xxxx" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="retrait-montant">Montant (€)</label>
+                            <input type="number" id="retrait-montant" placeholder="50" min="0.01" step="0.01" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full btn-sm">Retirer</button>
+                    </form>
+                </div>
+            </div>
+            <div id="result-compte" class="result-box hidden"></div>
+
+            <div class="card" style="margin-top: 8px;">
+                <p class="card-title">Liste des comptes</p>
+                <div id="comptes-table-container">
+                    <p class="table-empty">Aucun compte enregistré.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Transactions -->
+        <section id="section-transactions" class="section">
+            <h1 class="section-title">Transactions</h1>
+            <div class="cards-grid">
+                <div class="card">
+                    <p class="card-title">Effectuer un virement</p>
+                    <form id="form-virement">
+                        <div class="form-group">
+                            <label for="virement-source">Compte source</label>
+                            <input type="text" id="virement-source" placeholder="cpt_xxxx" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="virement-destination">Compte destination</label>
+                            <input type="text" id="virement-destination" placeholder="cpt_yyyy" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="virement-montant">Montant (€)</label>
+                            <input type="number" id="virement-montant" placeholder="200" min="0.01" step="0.01" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full btn-sm">Virer</button>
+                    </form>
+                </div>
+                <div class="card">
+                    <p class="card-title">Consulter une transaction</p>
+                    <form id="form-consulter-transaction">
+                        <div class="form-group">
+                            <label for="transaction-id">Identifiant transaction</label>
+                            <input type="text" id="transaction-id" placeholder="trx_xxxx" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full btn-sm">Rechercher</button>
+                    </form>
+                </div>
+            </div>
+            <div id="result-transaction" class="result-box hidden"></div>
+
+            <div class="card" style="margin-top: 8px;">
+                <p class="card-title">Liste des transactions</p>
+                <div id="transactions-table-container">
+                    <p class="table-empty">Aucune transaction enregistrée.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<script src="js/core/http-client.js"></script>
+<script src="js/services/auth.service.js"></script>
+<script src="js/services/client.service.js"></script>
+<script src="js/services/compte.service.js"></script>
+<script src="js/services/transaction.service.js"></script>
+<script src="js/pages/dashboard.js"></script>
+</body>
+</html>

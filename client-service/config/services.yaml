@@ -36,4 +36,8 @@ services:
         arguments:
             $clientRepository: '@App\Application\Port\Out\ClientRepositoryInterface'
 
+    App\Application\UseCase\ListerClientsUseCase:
+        arguments:
+            $clientRepository: '@App\Application\Port\Out\ClientRepositoryInterface'
+
     # please note that last definitions always *replace* previous ones

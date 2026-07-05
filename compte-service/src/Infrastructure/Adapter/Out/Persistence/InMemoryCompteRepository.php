@@ -19,4 +19,9 @@ class InMemoryCompteRepository implements CompteRepositoryInterface
     {
         return $this->comptes[$id] ?? null;
     }
+
+    public function findAll(): array
+    {
+        return array_values($this->comptes);
+    }
 }

@@ -11,4 +11,7 @@ interface TransactionRepositoryInterface
     public function findById(string $id): ?Transaction;
 
     public function save(Transaction $transaction): void;
+
+    /** @return Transaction[] */
+    public function findAll(): array;
 }
