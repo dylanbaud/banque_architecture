@@ -50,8 +50,9 @@ return [
         ['pattern' => '/clients/{id}',             'service' => 'client', 'upstream_path' => '/clients/{id}',             'methods' => ['GET']],
 
         // Transaction service
-        ['pattern' => '/transactions',             'service' => 'transaction', 'upstream_path' => '/transactions',             'methods' => ['GET', 'POST']],
-        ['pattern' => '/transactions/{id}',        'service' => 'transaction', 'upstream_path' => '/transactions/{id}',        'methods' => ['GET']],
+        ['pattern' => '/accounts/{id}/transactions', 'service' => 'transaction', 'upstream_path' => '/accounts/{id}/transactions', 'methods' => ['GET']],
+        ['pattern' => '/transactions',               'service' => 'transaction', 'upstream_path' => '/transactions',               'methods' => ['GET', 'POST']],
+        ['pattern' => '/transactions/{id}',          'service' => 'transaction', 'upstream_path' => '/transactions/{id}',          'methods' => ['GET']],
     ],
 
     // ── Public paths (no JWT required) ─────────────────────────────────────

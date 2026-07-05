@@ -74,6 +74,26 @@ class PdoTransactionRepository implements TransactionRepositoryInterface
         ), $rows);
     }
 
+    public function findByCompteId(string $compteId): array
+    {
+        $stmt = $this->pdo->prepare(
+            'SELECT * FROM transaction
+             WHERE compte_source_id = :id OR compte_destination_id = :id
+             ORDER BY date_creation DESC'
+        );
+        $stmt->execute(['id' => $compteId]);
+
+        return array_map(fn (array $row) => Transaction::reconstruct(
+            $row['id'],
+            $row['compte_source_id'],
+            $row['compte_destination_id'],
+            (float) $row['montant'],
+            new \DateTimeImmutable($row['date_creation']),
+            $row['statut'],
+            $row['motif_echec'],
+        ), $stmt->fetchAll());
+    }
+
     public function save(Transaction $transaction): void
     {
         $sql = '

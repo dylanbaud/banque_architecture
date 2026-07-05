@@ -14,4 +14,7 @@ interface TransactionRepositoryInterface
 
     /** @return Transaction[] */
     public function findAll(): array;
+
+    /** @return Transaction[] */
+    public function findByCompteId(string $compteId): array;
 }
