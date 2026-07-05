@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Adapter\In\Web;
 
 use App\Application\UseCase\ConsulterTransactionUseCase;
+use App\Application\UseCase\ConsulterTransactionsParCompteUseCase;
 use App\Application\UseCase\EffectuerVirementUseCase;
 use App\Application\UseCase\ListerTransactionsUseCase;
 use App\Infrastructure\DTO\TransactionResponseDTO;
@@ -20,6 +21,7 @@ class TransactionController extends AbstractController
     public function __construct(
         private readonly EffectuerVirementUseCase $effectuerVirementUseCase,
         private readonly ConsulterTransactionUseCase $consulterTransactionUseCase,
+        private readonly ConsulterTransactionsParCompteUseCase $consulterTransactionsParCompteUseCase,
         private readonly ListerTransactionsUseCase $listerTransactionsUseCase,
         private readonly ValidatorInterface $validator,
     ) {
@@ -65,6 +67,17 @@ class TransactionController extends AbstractController
         );
 
         return new JsonResponse(TransactionResponseDTO::fromEntity($transaction), 201);
+    }
+
+    #[Route('/accounts/{compteId}/transactions', methods: ['GET'])]
+    public function consulterParCompte(string $compteId): JsonResponse
+    {
+        $transactions = $this->consulterTransactionsParCompteUseCase->execute($compteId);
+
+        return new JsonResponse(array_map(
+            fn ($t) => TransactionResponseDTO::fromEntity($t),
+            $transactions
+        ));
     }
 
     #[Route('/transactions/{id}', methods: ['GET'])]

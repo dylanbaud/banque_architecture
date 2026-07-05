@@ -152,6 +152,18 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    document.getElementById('form-transactions-par-compte').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const compteId = document.getElementById('transactions-compte-id').value.trim();
+
+        try {
+            const transactions = await TransactionService.listerParCompte(compteId);
+            showResult('result-transaction', transactions);
+        } catch (err) {
+            showNotification(err.message, 'error');
+        }
+    });
+
     // --- Utilitaires -------------------------------------------------------------
 
     async function loadTransactionsTable() {
