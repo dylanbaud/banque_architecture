@@ -73,6 +73,23 @@ class Transaction
         return $this->motifEchec;
     }
 
+    public static function reconstruct(
+        string $id,
+        string $compteSourceId,
+        string $compteDestinationId,
+        float $montant,
+        \DateTimeImmutable $dateCreation,
+        string $statut,
+        ?string $motifEchec,
+    ): self {
+        $t = new self($id, $compteSourceId, $compteDestinationId, $montant);
+        $t->dateCreation = $dateCreation;
+        $t->statut       = $statut;
+        $t->motifEchec   = $motifEchec;
+
+        return $t;
+    }
+
     public function marquerCommeCompletee(): void
     {
         $this->statut = self::STATUT_COMPLETED;

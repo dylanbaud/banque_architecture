@@ -10,7 +10,7 @@ use Gateway\Middleware\CorsMiddleware;
 use Gateway\Middleware\LoggerMiddleware;
 use Gateway\Proxy\HttpProxy;
 
-$config = require __DIR__ . '/../config/gateway.php';
+$config = require_once __DIR__ . '/../config/gateway.php';
 
 $router  = new Router($config['routes']);
 $proxy   = new HttpProxy();
@@ -30,7 +30,7 @@ $request = [
 ];
 
 if ($request['method'] === 'GET' && $request['uri'] === '/') {
-    require __DIR__ . '/home.php';
+    require_once __DIR__ . '/home.php';
     exit;
 }
 
