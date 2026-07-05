@@ -101,6 +101,15 @@ services:
     depends_on:
       - auth-php
 
+  front:
+    build:
+      context: ./front-service
+      dockerfile: Dockerfile
+    container_name: front
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+
   db:
     image: mysql:8.0
     container_name: banque_db

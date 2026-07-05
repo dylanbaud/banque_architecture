@@ -69,6 +69,34 @@ class PdoTransactionRepository implements TransactionRepositoryInterface
         return $transaction;
     }
 
+    public function findAll(): array
+    {
+        $stmt = $this->pdo->query('SELECT * FROM transaction ORDER BY date_creation DESC');
+        $rows = $stmt->fetchAll();
+
+        return array_map(function (array $row) {
+            $transaction = new Transaction(
+                $row['id'],
+                $row['compte_source_id'],
+                $row['compte_destination_id'],
+                (float) $row['montant']
+            );
+
+            $reflection = new \ReflectionClass($transaction);
+
+            $dateProp = $reflection->getProperty('dateCreation');
+            $dateProp->setValue($transaction, new \DateTimeImmutable($row['date_creation']));
+
+            $statutProp = $reflection->getProperty('statut');
+            $statutProp->setValue($transaction, $row['statut']);
+
+            $motifProp = $reflection->getProperty('motifEchec');
+            $motifProp->setValue($transaction, $row['motif_echec']);
+
+            return $transaction;
+        }, $rows);
+    }
+
     public function save(Transaction $transaction): void
     {
         $sql = '

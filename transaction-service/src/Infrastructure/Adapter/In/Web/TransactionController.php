@@ -6,6 +6,7 @@ namespace App\Infrastructure\Adapter\In\Web;
 
 use App\Application\UseCase\ConsulterTransactionUseCase;
 use App\Application\UseCase\EffectuerVirementUseCase;
+use App\Application\UseCase\ListerTransactionsUseCase;
 use App\Infrastructure\DTO\TransactionResponseDTO;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,8 +20,20 @@ class TransactionController extends AbstractController
     public function __construct(
         private readonly EffectuerVirementUseCase $effectuerVirementUseCase,
         private readonly ConsulterTransactionUseCase $consulterTransactionUseCase,
+        private readonly ListerTransactionsUseCase $listerTransactionsUseCase,
         private readonly ValidatorInterface $validator,
     ) {
+    }
+
+    #[Route('/transactions', methods: ['GET'])]
+    public function lister(): JsonResponse
+    {
+        $transactions = $this->listerTransactionsUseCase->execute();
+
+        return new JsonResponse(array_map(
+            fn ($t) => TransactionResponseDTO::fromEntity($t),
+            $transactions
+        ));
     }
 
     #[Route('/transactions', methods: ['POST'])]

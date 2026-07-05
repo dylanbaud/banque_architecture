@@ -46,6 +46,17 @@ class PdoClientRepository implements ClientRepositoryInterface
         return new Client($row['id'], $row['nom'], $row['prenom'], $row['email']);
     }
 
+    public function findAll(): array
+    {
+        $stmt = $this->pdo->query('SELECT * FROM client ORDER BY nom, prenom');
+        $rows = $stmt->fetchAll();
+
+        return array_map(
+            fn (array $row) => new Client($row['id'], $row['nom'], $row['prenom'], $row['email']),
+            $rows
+        );
+    }
+
     public function save(Client $client): void
     {
         $stmt = $this->pdo->prepare('

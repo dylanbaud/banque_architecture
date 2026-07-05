@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BanqueApp — Connexion</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-page">
+
+    <div class="auth-container">
+        <div class="auth-logo">
+            <h1>BanqueApp</h1>
+        </div>
+
+        <div class="auth-tabs">
+            <button class="auth-tab active" data-tab="login">Connexion</button>
+            <button class="auth-tab" data-tab="register">Inscription</button>
+        </div>
+
+        <form id="login-form" class="auth-form">
+            <div class="form-group">
+                <label for="login-email">Email</label>
+                <input type="email" id="login-email" placeholder="votre@email.com" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Mot de passe</label>
+                <input type="password" id="login-password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Se connecter</button>
+        </form>
+
+        <form id="register-form" class="auth-form hidden">
+            <div class="form-group">
+                <label for="register-email">Email</label>
+                <input type="email" id="register-email" placeholder="votre@email.com" required>
+            </div>
+            <div class="form-group">
+                <label for="register-password">Mot de passe</label>
+                <input type="password" id="register-password" placeholder="Minimum 6 caractères" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Créer un compte</button>
+        </form>
+
+        <div id="auth-message" class="message hidden"></div>
+    </div>
+
+    <script src="js/core/http-client.js"></script>
+    <script src="js/services/auth.service.js"></script>
+    <script src="js/pages/login.js"></script>
+</body>
+</html>

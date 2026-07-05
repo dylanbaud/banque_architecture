@@ -6,6 +6,7 @@ namespace App\Infrastructure\Adapter\In\Web;
 
 use App\Application\UseCase\ConsulterClientUseCase;
 use App\Application\UseCase\CreerClientUseCase;
+use App\Application\UseCase\ListerClientsUseCase;
 use App\Infrastructure\DTO\ClientResponseDTO;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,18 +17,23 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ClientController extends AbstractController
 {
-    private CreerClientUseCase $creerClientUseCase;
-    private ConsulterClientUseCase $consulterClientUseCase;
-    private ValidatorInterface $validator;
-
     public function __construct(
-        CreerClientUseCase $creerClientUseCase,
-        ConsulterClientUseCase $consulterClientUseCase,
-        ValidatorInterface $validator,
+        private readonly CreerClientUseCase $creerClientUseCase,
+        private readonly ConsulterClientUseCase $consulterClientUseCase,
+        private readonly ListerClientsUseCase $listerClientsUseCase,
+        private readonly ValidatorInterface $validator,
     ) {
-        $this->creerClientUseCase = $creerClientUseCase;
-        $this->consulterClientUseCase = $consulterClientUseCase;
-        $this->validator = $validator;
+    }
+
+    #[Route('/clients', name: 'lister_clients', methods: ['GET'])]
+    public function lister(): JsonResponse
+    {
+        $clients = $this->listerClientsUseCase->execute();
+
+        return $this->json(array_map(
+            fn ($client) => ClientResponseDTO::fromEntity($client),
+            $clients
+        ));
     }
 
     #[Route('/clients', name: 'creer_client', methods: ['POST'])]

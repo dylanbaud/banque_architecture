@@ -5,6 +5,7 @@ namespace App\Infrastructure\Adapter\In\Web;
 use App\Application\UseCase\ConsulterCompteUseCase;
 use App\Application\UseCase\CreerCompteUseCase;
 use App\Application\UseCase\DeposerArgentUseCase;
+use App\Application\UseCase\ListerComptesUseCase;
 use App\Application\UseCase\RetirerArgentUseCase;
 use App\Domain\Exception\CompteBloqueException;
 use App\Domain\Exception\CompteInexistantException;
@@ -23,8 +24,20 @@ class CompteController extends AbstractController
         private readonly ConsulterCompteUseCase $consulterCompteUseCase,
         private readonly CreerCompteUseCase $creerCompteUseCase,
         private readonly DeposerArgentUseCase $deposerArgentUseCase,
+        private readonly ListerComptesUseCase $listerComptesUseCase,
         private readonly RetirerArgentUseCase $retirerArgentUseCase,
     ) {
+    }
+
+    #[Route('', methods: ['GET'])]
+    public function lister(): JsonResponse
+    {
+        $comptes = $this->listerComptesUseCase->execute();
+
+        return $this->json(array_map(
+            fn ($c) => CompteResponseDTO::fromEntity($c),
+            $comptes
+        ));
     }
 
     /**

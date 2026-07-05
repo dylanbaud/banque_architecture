@@ -44,6 +44,20 @@ class PdoCompteRepository implements CompteRepositoryInterface
         return $compte;
     }
 
+    public function findAll(): array
+    {
+        $stmt = $this->pdo->query('SELECT * FROM comptes ORDER BY id');
+        $rows = $stmt->fetchAll();
+
+        return array_map(function (array $row) {
+            $compte = new Compte($row['id'], $row['client_id'], (float) $row['solde']);
+            if ($row['est_bloque']) {
+                $compte->bloquer();
+            }
+            return $compte;
+        }, $rows);
+    }
+
     public function save(Compte $compte): void
     {
         $stmt = $this->pdo->prepare('
