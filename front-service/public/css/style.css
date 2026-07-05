@@ -230,12 +230,12 @@ body {
 }
 
 .nav-link:hover {
-    background: rgba(255,255,255,.08);
+    background: #243f68;
     color: #fff;
 }
 
 .nav-link.active {
-    background: rgba(255,255,255,.12);
+    background: #2a4873;
     color: #fff;
     border-left: 3px solid #fff;
 }
@@ -253,15 +253,15 @@ body {
 
 #btn-logout {
     width: 100%;
-    background: rgba(255,255,255,.08);
-    color: rgba(255,255,255,.75);
-    border: 1px solid rgba(255,255,255,.15);
+    background: #243f68;
+    color: #c8d6e5;
+    border: 1px solid #3a5a8a;
     padding: 9px;
     font-size: 13px;
 }
 
 #btn-logout:hover {
-    background: rgba(255,255,255,.15);
+    background: #2e4a74;
     color: #fff;
 }
 
