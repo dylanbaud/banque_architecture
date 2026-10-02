@@ -30,8 +30,8 @@ Suivez ces étapes pour démarrer l'environnement complet.
 
 | Service | URL / Port | Informations |
 | :--- | :--- | :--- |
+| **FRONT** | `http://localhost:3000/` | Front |
 | **API Gateway** | `http://localhost:8080` | Point d'entrée principal |
-| **Base de données (MySQL)** | `localhost:3307` | **User:** `banque`, **Pass:** `banque`, **DB:** `banque` |
 | **phpMyAdmin** | `http://localhost:8081` | Pour l'administration de la BDD MySQL |
 
 ### 📂 Structure des services
