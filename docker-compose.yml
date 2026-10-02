@@ -1,3 +1,12 @@
+# Configuration commune des services Symfony (remplace le .env, non versionné)
+x-symfony-env: &symfony-env
+  APP_ENV: dev
+  APP_RUNTIME_OPTIONS: '{"disable_dotenv":true}'
+  DEFAULT_URI: http://localhost
+  DB_DSN: "mysql:host=db;port=3306;dbname=banque;charset=utf8mb4"
+  DB_USER: banque
+  DB_PASSWORD: banque
+
 services:
 
   gateway-php:
@@ -10,6 +19,7 @@ services:
       JWT_SECRET: "super_secret_key_that_is_at_least_32_bytes_long_for_hs256"
     volumes:
       - ./gateway-service:/var/www/api-gateway
+      - /var/www/api-gateway/vendor
 
   gateway-nginx:
     image: nginx:alpine
@@ -29,8 +39,13 @@ services:
       dockerfile: Dockerfile
     container_name: compte-php
     restart: unless-stopped
+    environment:
+      <<: *symfony-env
+    depends_on:
+      - db
     volumes:
       - ./compte-service:/var/www/compte-service
+      - /var/www/compte-service/vendor
 
   compte-nginx:
     image: nginx:alpine
@@ -48,8 +63,13 @@ services:
       dockerfile: Dockerfile
     container_name: client-php
     restart: unless-stopped
+    environment:
+      <<: *symfony-env
+    depends_on:
+      - db
     volumes:
       - ./client-service:/var/www/client-service
+      - /var/www/client-service/vendor
 
   client-nginx:
     image: nginx:alpine
@@ -67,8 +87,14 @@ services:
       dockerfile: Dockerfile
     container_name: transaction-php
     restart: unless-stopped
+    environment:
+      <<: *symfony-env
+      COMPTE_SERVICE_URL: http://compte-nginx:80
+    depends_on:
+      - db
     volumes:
       - ./transaction-service:/var/www/transaction-service
+      - /var/www/transaction-service/vendor
 
   transaction-nginx:
     image: nginx:alpine
@@ -86,10 +112,14 @@ services:
       dockerfile: Dockerfile
     container_name: auth-php
     restart: unless-stopped
+    depends_on:
+      - db
     environment:
+      <<: *symfony-env
       JWT_SECRET: "super_secret_key_that_is_at_least_32_bytes_long_for_hs256"
     volumes:
       - ./auth-service:/var/www/auth-service
+      - /var/www/auth-service/vendor
 
   auth-nginx:
     image: nginx:alpine
@@ -123,6 +153,7 @@ services:
       - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./db/init:/docker-entrypoint-initdb.d:ro
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
