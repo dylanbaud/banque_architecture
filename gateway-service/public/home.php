@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BanqueApp — API Reference</title>
+    <title>BanqueApp - API Reference</title>
     <style>
         :root {
             --primary: #1e3a5f;
@@ -62,7 +62,7 @@
 <body>
 
 <header>
-    <h1>BanqueApp — API Reference</h1>
+    <h1>BanqueApp - API Reference</h1>
     <p>Documentation des endpoints exposés par le gateway</p>
     <div class="header-meta">
         <span class="meta-badge">Base URL : http://localhost:8080</span>
