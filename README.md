@@ -20,7 +20,10 @@ Suivez ces étapes pour démarrer l'environnement complet.
     docker-compose up -d --build
     ```
 
-2.  **Vérifier que les services tournent :**
+2.  **Renommer .env**
+    Renommez les .env.example en .env
+
+3.  **Vérifier que les services tournent :**
 
     ```bash
     docker ps
